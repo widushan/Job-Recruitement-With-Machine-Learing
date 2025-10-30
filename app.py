@@ -143,7 +143,28 @@ def job():
 
 @app.route('/dashboard')
 def dashboard():
-    return render_template('dashboard.html')
+    average_satisfaction, department_satisfaction, salary_satisfaction, left_employees, stayed_employees= employee_important_info(df)
+    plots(df, 'left')
+    plots(df, 'salary')
+    plots(df, 'number_project')
+    plots(df, 'department')
+
+    distribution(df, 'salary')
+    distribution(df, 'department')
+
+    comparison(df, 'department', 'satisfaction_level')
+
+    corr_with_left(df)
+
+    histogram(df, 'satisfaction_level')
+
+    # Convert Series objects to dictionaries
+    department_satisfaction= department_satisfaction.to_dict()
+    salary_satisfaction = salary_satisfaction.to_dict()
+    return render_template('dashboard.html', df=df.head(),average_satisfaction=average_satisfaction,
+                           department_satisfaction=department_satisfaction,salary_satisfaction=salary_satisfaction,
+                           left_employees=left_employees,stayed_employees=stayed_employees
+    )
 
 
 #prediction===============================================================
